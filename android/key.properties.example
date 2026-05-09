@@ -1,0 +1,6 @@
+# Copy to key.properties (gitignored) and fill in for Play Store release signing.
+# storeFile path is relative to android/app/
+storePassword=
+keyPassword=
+keyAlias=
+storeFile=../upload-keystore.jks
