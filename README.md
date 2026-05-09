@@ -1,4 +1,4 @@
-# studio_project
+# Lesson Planner for Teachers 
 
 A new Flutter project.
 
