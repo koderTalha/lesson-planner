@@ -43,3 +43,24 @@ Built-in themes: `brand` (Untitled Presentation — default), `classroom`, `ocea
 To update the default deck design, replace `assets/templates/untitled-presentation.pptx` with your PowerPoint file (keep **Title Slide** and **Title and Content** layouts).
 
 To use a **custom PowerPoint theme**, design a `.pptx` in PowerPoint (Slide Master → colors/fonts), save it as `assets/templates/my-brand.pptx`, and pass `"theme": "my-brand"` (filename without extension). For best results, keep standard layouts named **Title Slide** and **Title and Content**.
+
+## Deploy to GCP (Cloud Run)
+
+See **[deploy/gcp/README.md](deploy/gcp/README.md)** for full steps.
+
+Quick start:
+
+```bash
+export GCP_PROJECT_ID=your-project-id
+export GEMINI_API_KEY=...
+export AUTH_API_KEY=...
+export JWT_SECRET=at-least-32-characters-long
+
+cd product/server
+chmod +x deploy/gcp/deploy.sh
+./deploy/gcp/deploy.sh
+```
+
+Docker build context is `product/server` (includes `app/` and `assets/templates/`).
+
+Copy the service URL into the Flutter app as `BACKEND_BASE_URL`.
