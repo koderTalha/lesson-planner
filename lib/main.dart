@@ -7,6 +7,7 @@ import 'core/theme/theme_cubit.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load(fileName: 'assets/config/defaults.env', isOptional: true);
   await dotenv.load(fileName: '.env', isOptional: true);
   final prefs = await SharedPreferences.getInstance();
   runApp(

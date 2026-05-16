@@ -44,12 +44,12 @@ class PdfPreviewScreen extends StatelessWidget {
           IconButton(
             tooltip: 'Share',
             icon: const Icon(Icons.ios_share_rounded),
-            onPressed: () => cubit.share(item),
+            onPressed: () => cubit.sharePdf(item),
           ),
         ],
       ),
       body: PdfPreview(
-        build: (_) => cubit.readBytes(item),
+        build: (_) => cubit.readPdfBytes(item),
         canChangePageFormat: false,
         canChangeOrientation: false,
         canDebug: false,

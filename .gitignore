@@ -49,4 +49,35 @@ app.*.map.json
 /android/key.properties
 **/*.jks
 **/*.keystore
+
+# Secrets & local env
 .env
+.env.*
+!.env.example
+# Local overrides only (committed template: assets/config/secrets.env)
+assets/config/secrets.local.env
+
+# Python backend
+**/.venv/
+**/venv/
+**/__pycache__/
+**/*.py[cod]
+**/.pytest_cache/
+**/.mypy_cache/
+**/.ruff_cache/
+*.egg-info/
+dist/
+build/
+
+# RAG / local uploads (legacy)
+product/data/
+
+# Auto-generated PPTX themes (recreated on server start)
+product/server/assets/templates/classroom.pptx
+product/server/assets/templates/ocean.pptx
+product/server/assets/templates/forest.pptx
+
+# Local / OS
+Thumbs.db
+*.tmp
+*.temp
