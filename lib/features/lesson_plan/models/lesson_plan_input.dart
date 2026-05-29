@@ -21,7 +21,7 @@ class LessonPlanInput {
   final String academicSession;
   final String plannerNo;
   final String week;
-  final DateTime date;
+  final DateTime? date;
   final String teacherName;
   final String subject;
   final String className;
@@ -46,7 +46,7 @@ class LessonPlanInput {
       'academicSession': academicSession,
       'plannerNo': plannerNo,
       'week': week,
-      'date': date.toIso8601String().split('T').first,
+      if (date != null) 'date': date!.toIso8601String().split('T').first,
       'teacherName': teacherName,
       'subject': subject,
       'class': className,

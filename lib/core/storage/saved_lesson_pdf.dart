@@ -9,7 +9,7 @@ class SavedLessonPdf extends Equatable {
   final String topic;
   final String? subTopic;
   final DateTime createdAt;
-  final DateTime lessonDate;
+  final DateTime? lessonDate;
   final int sizeBytes;
 
   const SavedLessonPdf({
@@ -20,7 +20,7 @@ class SavedLessonPdf extends Equatable {
     required this.topic,
     required this.subTopic,
     required this.createdAt,
-    required this.lessonDate,
+    this.lessonDate,
     required this.sizeBytes,
   });
 
@@ -34,7 +34,9 @@ class SavedLessonPdf extends Equatable {
     return parts.isEmpty ? 'Lesson plan' : parts.join(' · ');
   }
 
-  String get readableDate => DateFormat('d MMM yyyy').format(lessonDate);
+  String get readableDate => lessonDate != null
+      ? DateFormat('d MMM yyyy').format(lessonDate!)
+      : DateFormat('d MMM yyyy').format(createdAt);
 
   String get readableSize {
     if (sizeBytes < 1024) return '$sizeBytes B';
@@ -45,12 +47,14 @@ class SavedLessonPdf extends Equatable {
   }
 
   String get exportFilename {
-    final date = DateFormat('yyyyMMdd').format(lessonDate);
+    final dateStr = lessonDate != null
+        ? DateFormat('yyyyMMdd').format(lessonDate!)
+        : DateFormat('yyyyMMdd').format(createdAt);
     final parts = [
       'lesson',
       _slug(subject),
       _slug(topic),
-      date,
+      dateStr,
     ].where((p) => p.isNotEmpty).join('_');
     return '$parts.pdf';
   }
@@ -62,7 +66,7 @@ class SavedLessonPdf extends Equatable {
         'topic': topic,
         'subTopic': subTopic,
         'createdAt': createdAt.toIso8601String(),
-        'lessonDate': lessonDate.toIso8601String(),
+        if (lessonDate != null) 'lessonDate': lessonDate!.toIso8601String(),
       };
 
   factory SavedLessonPdf.fromJson(
@@ -79,8 +83,7 @@ class SavedLessonPdf extends Equatable {
       subTopic: j['subTopic'] as String?,
       createdAt:
           DateTime.tryParse(j['createdAt'] as String? ?? '') ?? DateTime.now(),
-      lessonDate:
-          DateTime.tryParse(j['lessonDate'] as String? ?? '') ?? DateTime.now(),
+      lessonDate: DateTime.tryParse(j['lessonDate'] as String? ?? ''),
       sizeBytes: sizeBytes,
     );
   }

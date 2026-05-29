@@ -29,7 +29,9 @@ class AiLessonService {
         'explanation, activity, wrapUp, classWork, homework, aol, afl, differentiation, criticalEvaluation. '
         'Write the ENTIRE plan in FUTURE TENSE only (e.g. will introduce, will explain, students will, the teacher will); '
         'do not use past tense for planned classroom actions. '
-        'Use plain text in JSON string values. You MAY use **double asterisks** only for short bold emphasis on key terms or section labels. '
+        'Use plain text in JSON string values. You MAY use **double asterisks** only to bold a short label word or key term. '
+        'For sub-section labels write **Label name:** then the paragraph text OUTSIDE the asterisks — '
+        'NEVER wrap an entire sentence or paragraph in **...**. '
         'No markdown headings (#), no links, no backticks. '
         'Use one line per list item, each line starting with "- " (dash and space) or a numbered line like "1. " (digit, period, space). '
         'Use line breaks between paragraphs. For sub-topics in explanation, use a line "Label name:" (ends with colon) then the paragraph on the same or next lines.',
@@ -90,10 +92,9 @@ class AiLessonService {
       'homework: H.W — brief homework task tied to the topic.',
     );
     system.writeln(
-      'afl: Assessment FOR learning — include exactly two labelled parts in plain text. '
-        'First part **Prior Knowledge:** rewrite or closely reuse the SAME questions (or equivalent wording) that you wrote in priorKnowledge, '
-        'so teachers see those questions repeated here. '
-        'Second part **Explanation:** short questions that will probe understanding during the explanation phase.',
+      'afl: Assessment FOR learning — write ONLY the Explanation subsection: '
+        'short questions that will probe understanding during the explanation phase (one per line or as bullets). '
+        'Do NOT include a Prior Knowledge subsection; it is added automatically from the priorKnowledge field.',
     );
     system.writeln(
       'differentiation: How tasks or support will vary for different learners (e.g. Group A/B/C or pacing).',

@@ -3,11 +3,9 @@ import 'package:equatable/equatable.dart';
 class LessonPlanState extends Equatable {
   static const defaultSession = '2026-2027';
   static const defaultPeriod = '40 minutes';
-  static final defaultDate = DateTime(2026, 5, 2);
-
   final String academicSession;
   final String period;
-  final DateTime date;
+  final DateTime? date;
   final bool useAiObjectives;
   final bool loading;
   final String? error;
@@ -17,7 +15,7 @@ class LessonPlanState extends Equatable {
   const LessonPlanState({
     required this.academicSession,
     required this.period,
-    required this.date,
+    this.date,
     required this.useAiObjectives,
     required this.loading,
     required this.error,
@@ -25,10 +23,10 @@ class LessonPlanState extends Equatable {
     this.lastSavedTitle,
   });
 
-  factory LessonPlanState.initial() => LessonPlanState(
+  factory LessonPlanState.initial() => const LessonPlanState(
         academicSession: defaultSession,
         period: defaultPeriod,
-        date: defaultDate,
+        date: null,
         useAiObjectives: true,
         loading: false,
         error: null,
@@ -38,6 +36,7 @@ class LessonPlanState extends Equatable {
     String? academicSession,
     String? period,
     DateTime? date,
+    bool clearDate = false,
     bool? useAiObjectives,
     bool? loading,
     String? error,
@@ -48,7 +47,7 @@ class LessonPlanState extends Equatable {
     return LessonPlanState(
       academicSession: academicSession ?? this.academicSession,
       period: period ?? this.period,
-      date: date ?? this.date,
+      date: clearDate ? null : (date ?? this.date),
       useAiObjectives: useAiObjectives ?? this.useAiObjectives,
       loading: loading ?? this.loading,
       error: clearError ? null : (error ?? this.error),

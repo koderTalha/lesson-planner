@@ -25,7 +25,9 @@ class LessonPlanBloc extends Bloc<LessonPlanEvent, LessonPlanState> {
       (e, emit) => emit(state.copyWith(period: e.period)),
     );
     on<LessonPlanDateChanged>(
-      (e, emit) => emit(state.copyWith(date: e.date)),
+      (e, emit) => emit(
+        state.copyWith(date: e.date, clearDate: e.date == null),
+      ),
     );
     on<LessonPlanObjectivesModeChanged>(
       (e, emit) => emit(state.copyWith(useAiObjectives: e.useAi)),

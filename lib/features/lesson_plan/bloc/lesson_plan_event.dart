@@ -24,7 +24,7 @@ class LessonPlanPeriodChanged extends LessonPlanEvent {
 }
 
 class LessonPlanDateChanged extends LessonPlanEvent {
-  final DateTime date;
+  final DateTime? date;
   const LessonPlanDateChanged(this.date);
   @override
   List<Object?> get props => [date];

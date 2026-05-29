@@ -75,6 +75,7 @@ String _numberPlainObjectiveLines(List<String> lines) {
 }
 
 bool _looksLikeLabelLine(String trimmed) {
+  if (trimmed.startsWith('**')) return false;
   final i = trimmed.indexOf(':');
   if (i <= 0 || i >= trimmed.length - 1) return false;
   if (RegExp(r'\d\s*:\s*\d').hasMatch(trimmed)) return false;
@@ -88,8 +89,22 @@ List<pw.TextSpan> _pdfSpans(String s, pw.TextStyle t, pw.TextStyle tb) {
   final parts = s.split('**');
   final out = <pw.TextSpan>[];
   for (var i = 0; i < parts.length; i++) {
-    if (parts[i].isEmpty) continue;
-    out.add(pw.TextSpan(text: parts[i], style: i.isOdd ? tb : t));
+    final part = parts[i];
+    if (part.isEmpty) continue;
+    if (i.isOdd) {
+      // Bold span — if it encodes "Label: long paragraph text" split at the colon
+      // so only the label stays bold and the rest renders as normal text.
+      final colonIdx = part.indexOf(':');
+      final afterColon = colonIdx > 0 ? part.substring(colonIdx + 1) : '';
+      if (colonIdx > 0 && afterColon.trim().length > 20) {
+        out.add(pw.TextSpan(text: part.substring(0, colonIdx + 1), style: tb));
+        out.add(pw.TextSpan(text: afterColon, style: t));
+      } else {
+        out.add(pw.TextSpan(text: part, style: tb));
+      }
+    } else {
+      out.add(pw.TextSpan(text: part, style: t));
+    }
   }
   if (out.isEmpty) {
     return [pw.TextSpan(text: ' ', style: t)];
@@ -351,7 +366,7 @@ class LessonPlanPdf {
               pw.TableRow(
                 children: [
                   hdrCell('Date:'),
-                  valCell(_ordinalDate(input.date)),
+                  valCell(input.date != null ? _ordinalDate(input.date!) : ''),
                   hdrCell('Subject:'),
                   valCell(input.subject),
                 ],
@@ -414,7 +429,7 @@ class LessonPlanPdf {
           pw.SizedBox(height: 3),
           block('Methodology:', gen.methodology),
           pw.SizedBox(height: 3),
-          block('Prior Knowledge:', gen.priorKnowledge),
+          block('Prior Knowledge:', 'Relevant questions will be asked. These questions are mentioned in AFL.'),
           pw.SizedBox(height: 3),
           block('Explanation:', gen.explanation),
           pw.SizedBox(height: 3),
@@ -428,7 +443,10 @@ class LessonPlanPdf {
           pw.SizedBox(height: 3),
           block('H.W:', gen.homework),
           pw.SizedBox(height: 3),
-          block('AFL:', gen.afl),
+          block(
+            'AFL:',
+            '**Prior Knowledge:**\n${gen.priorKnowledge}\n\n**Explanation:**\n${gen.afl}',
+          ),
           pw.SizedBox(height: 3),
           block('Differentiation:', gen.differentiation),
           pw.SizedBox(height: 3),

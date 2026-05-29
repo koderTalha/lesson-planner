@@ -132,8 +132,8 @@ class LabeledDropdown<T> extends StatelessWidget {
 
 class LabeledDateField extends StatelessWidget {
   final String label;
-  final DateTime value;
-  final ValueChanged<DateTime> onChanged;
+  final DateTime? value;
+  final ValueChanged<DateTime?> onChanged;
   final DateTime? firstDate;
   final DateTime? lastDate;
   final String pattern;
@@ -153,7 +153,7 @@ class LabeledDateField extends StatelessWidget {
   Future<void> _pick(BuildContext context) async {
     final d = await showDatePicker(
       context: context,
-      initialDate: value,
+      initialDate: value ?? DateTime.now(),
       firstDate: firstDate ?? DateTime(2020),
       lastDate: lastDate ?? DateTime(2035),
     );
@@ -175,12 +175,29 @@ class LabeledDateField extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(DateFormat(pattern).format(value)),
-                Icon(
-                  Icons.calendar_today_outlined,
-                  size: 18,
-                  color: scheme.onSurfaceVariant,
+                Text(
+                  value != null
+                      ? DateFormat(pattern).format(value!)
+                      : 'Select date',
+                  style: value == null
+                      ? TextStyle(color: scheme.onSurfaceVariant)
+                      : null,
                 ),
+                if (value != null)
+                  GestureDetector(
+                    onTap: () => onChanged(null),
+                    child: Icon(
+                      Icons.close,
+                      size: 18,
+                      color: scheme.onSurfaceVariant,
+                    ),
+                  )
+                else
+                  Icon(
+                    Icons.calendar_today_outlined,
+                    size: 18,
+                    color: scheme.onSurfaceVariant,
+                  ),
               ],
             ),
           ),
